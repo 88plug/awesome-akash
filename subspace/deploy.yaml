@@ -1,0 +1,109 @@
+---
+version: "2.0"
+services:
+  node:
+    image: ghcr.io/subspace/node:gemini-3h-2024-feb-15
+    expose:
+      - port: 30333
+        as: 30333
+        to:
+          - global: true
+      - port: 30433
+        as: 30433
+        to:
+          - global: true
+      - port: 9944
+        to:
+          - service: farmer
+    args:
+      - "run"
+      - "--chain"
+      - "gemini-3h"
+      - "--base-path"
+      - "/var/subspace"
+      - "--listen-on"
+      - "/ip4/0.0.0.0/tcp/30333"
+      - "--dsn-listen-on"
+      - "/ip4/0.0.0.0/udp/30433/quic-v1"
+      - "--dsn-listen-on"
+      - "/ip4/0.0.0.0/tcp/30433"
+      - "--rpc-cors"
+      - "all"
+      - "--rpc-methods"
+      - "unsafe"
+      - "--rpc-listen-on"
+      - "0.0.0.0:9944"
+      - "--farmer"
+      - "--name"
+      - "akash"
+
+  farmer:
+    depends_on:
+      - node
+    image: ghcr.io/subspace/farmer:gemini-3h-2024-feb-15
+    expose:
+      - port: 30533
+        as: 30533
+        to:
+          - global: true
+    args:
+      - "farm"
+      - "--node-rpc-url"
+      - "ws://node:9944"
+      - "--listen-on"
+      - "/ip4/0.0.0.0/udp/30533/quic-v1"
+      - "--listen-on"
+      - "/ip4/0.0.0.0/tcp/30533"
+      - "--reward-address"
+      - "YOUR_WALLET_ADDRESS" #<<<<REPLACE ME
+      - "path=/var/subspace,size=100G"
+profiles:
+  compute:
+    node:
+      resources:
+        cpu:
+          units: 4.0
+        memory:
+          size: 8Gi
+        storage:
+          size: 200Gi
+    farmer:
+      resources:
+        cpu:
+          units: 4.0
+        memory:
+          size: 8Gi
+        storage:
+          size: 100Gi
+
+  placement:
+    akash:
+      #######################################################
+      #Keep this section to deploy on trusted providers
+      signedBy:
+        anyOf:
+          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
+          - "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4"
+      #######################################################
+      #Remove this section to deploy on untrusted providers
+      #Miners: You can receive more bids from more providers by removing this section
+      #Beware* You may have deployment, security, or other issues on untrusted providers
+      #https://docs.akash.network/providers/akash-audited-attributes
+      attributes:
+      pricing:
+        node:
+          denom: uakt
+          amount: 10000
+        farmer:
+          denom: uakt
+          amount: 10000
+
+deployment:
+  node:
+    akash:
+      profile: node
+      count: 1
+  farmer:
+    akash:
+      profile: farmer
+      count: 1
