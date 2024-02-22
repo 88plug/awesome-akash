@@ -2,7 +2,7 @@
 version: "2.0"
 services:
   node:
-    image: ghcr.io/subspace/node:gemini-3h-2024-feb-15
+    image: ghcr.io/subspace/node:gemini-3h-2024-feb-19
     expose:
       - port: 30333
         as: 30333
@@ -19,6 +19,10 @@ services:
       - "run"
       - "--chain"
       - "gemini-3h"
+      - "--blocks-pruning"
+      - "256"
+      - "--state-pruning"
+      - "archive-canonical"
       - "--base-path"
       - "/var/subspace"
       - "--listen-on"
@@ -40,7 +44,7 @@ services:
   farmer:
     depends_on:
       - node
-    image: ghcr.io/subspace/farmer:gemini-3h-2024-feb-15
+    image: ghcr.io/subspace/farmer:gemini-3h-2024-feb-19
     expose:
       - port: 30533
         as: 30533
@@ -48,6 +52,10 @@ services:
           - global: true
     args:
       - "farm"
+#      - "--plotting-thread-pool-size=4"
+#      - "--sector-encoding-concurrency=1"
+#      - "--sector-downloading-concurrency=2"
+      - "--farm-during-initial-plotting=true"
       - "--node-rpc-url"
       - "ws://node:9944"
       - "--listen-on"
