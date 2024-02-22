@@ -10,11 +10,12 @@ services:
         to:
           - global: true
     env:
-      - ALGO=ETCHASH
+      - ALGO=PYRIN
       - WALLET_ADDRESS=""
-      - POOL="stratum+ssl://us-solo-etc.2miners.com:15050"
+      - POOL="stratum+ssl://us2.pyrin.herominers.com:1177"
       - PASSWORD=x
       - OPTIONS="--apiport=21550 --apihost=0.0.0.0"
+
 #The default command. Adjust OPTIONS as needed.
 #/root/lolMiner -a $ALGO -p $POOL -u $WALLET_ADDRESS --pass $PASSWORD $OPTIONS
 profiles:
