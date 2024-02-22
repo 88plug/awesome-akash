@@ -94,6 +94,7 @@ Also, follow [@akashnet\_](https://twitter.com/akashnet_) to stay in the loop wi
 - [Confluence](confluence)
 - [Drupal](drupal)
 - [Wiki.js](wikijs)
+- [Nitropage](nitropage)
 
 ### Built with Cosmos-SDK
 
@@ -106,7 +107,9 @@ Also, follow [@akashnet\_](https://twitter.com/akashnet_) to stay in the loop wi
 
 ### Machine Learning
 
+- [Ray Cluster](ray)
 - [Jupyter Notebook](jupyter)
+- [Jupyter Notebook with ezkl](tensorflow-jupyter-ezkl)
 - [Jupyter Notebook with Python Kernel](tensorflow-jupyter-mnist)
 - [TensorFlow Serving MNIST CNN Model](tensorflow-serving-mnist)
 - [Handwritten Digits Recognition Application](tensorflow-webapp-mnist)
@@ -135,6 +138,7 @@ Also, follow [@akashnet\_](https://twitter.com/akashnet_) to stay in the loop wi
 - [CouchDB](couchdb)
 - [InfluxDB](influxdb)
 - [SurrealDB](SurrealDB)
+- [DefraDB](defradb)
 
 ### DeFi
 
@@ -187,6 +191,7 @@ Awesome DeFi apps you can deploy on Akash
 - [Handshake](handshake)
 - [Fuse Network Node](fuse-network-node)
 - [Injective](injective)
+- [Starknet Node by Juno](juno)
 
 ### Business
 
@@ -317,6 +322,7 @@ Awesome DeFi apps you can deploy on Akash
 
 - [SoftEther VPN](softether-vpn)
 - [Sentinel dVPN node](Sentinel-dVPN-node)
+- [Tor Proxy](tor-proxy)
 
 ### Databases
 
