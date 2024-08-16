@@ -1,0 +1,58 @@
+---
+version: "2.0"
+
+services:
+  xmrig-proxy:
+    image: cryptoandcoffee/akash-xmrig-proxy:latest
+    env:
+      - ALGO=rx/0
+      - POOL=pool.hashvault.pro:443
+      - WALLET=
+      - WORKER=akash
+      - PASS=x
+      - TLS=false
+      - TLS_FINGERPRINT=
+      - RANDOMX_MODE=fast
+      - PROXY_PORT=8080
+      - PULL_LATEST=false
+      - REPO_URL=https://github.com/xmrig/xmrig-proxy.git
+    expose:
+      - port: 8080
+        as: 8080
+        to:
+          - global: true
+
+profiles:
+  compute:
+    xmrig-proxy:
+      resources:
+        cpu:
+          units: 1.0
+        memory:
+          size: 1Gi
+        storage:
+          size: 1Gi
+  placement:
+    akash:
+      attributes:
+        host: akash
+      #######################################################
+      #Keep this section to deploy on trusted providers
+      signedBy:
+        anyOf:
+          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
+          - "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4"
+      #######################################################
+      #Remove this section to deploy on untrusted providers
+      #Miners: You can receive more bids from more providers by removing this section
+      #Beware* You may have deployment, security, or other issues on untrusted providers
+      #https://docs.akash.network/providers/akash-audited-attributes      pricing:
+        xmrig-proxy:
+          denom: uakt
+          amount: 1000
+
+deployment:
+  xmrig-proxy:
+    akash:
+      profile: xmrig-proxy
+      count: 1
