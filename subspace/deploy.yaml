@@ -1,8 +1,38 @@
 ---
 version: "2.0"
 services:
+  farmer:
+    depends_on:
+      - node
+    image: ghcr.io/subspace/farmer:gemini-3h-2024-jul-29
+    expose:
+      - port: 30533
+        as: 30533
+        to:
+          - global: true
+    params:
+      storage:
+        data:
+          mount: /var/subspace
+          readOnly: false
+
+    args:
+      - "farm"
+#      - "--plotting-thread-pool-size=4"
+#      - "--sector-encoding-concurrency=1"
+#      - "--sector-downloading-concurrency=2"
+      - "--farm-during-initial-plotting=true"
+      - "--node-rpc-url"
+      - "ws://node:9944"
+      - "--listen-on"
+      - "/ip4/0.0.0.0/udp/30533/quic-v1"
+      - "--listen-on"
+      - "/ip4/0.0.0.0/tcp/30533"
+      - "--reward-address"
+      - "st9V6Wmm2CP9nTWRxbQ6Fb4xUxadRTFrqGgCCTAyptjSotR4E" #<<<<REPLACE ME
+      - "path=/var/subspace,size=100G"
   node:
-    image: ghcr.io/subspace/node:gemini-3h-2024-feb-19
+    image: ghcr.io/subspace/node:gemini-3h-2024-jul-29
     expose:
       - port: 30333
         as: 30333
@@ -40,31 +70,6 @@ services:
       - "--farmer"
       - "--name"
       - "akash"
-
-  farmer:
-    depends_on:
-      - node
-    image: ghcr.io/subspace/farmer:gemini-3h-2024-feb-19
-    expose:
-      - port: 30533
-        as: 30533
-        to:
-          - global: true
-    args:
-      - "farm"
-#      - "--plotting-thread-pool-size=4"
-#      - "--sector-encoding-concurrency=1"
-#      - "--sector-downloading-concurrency=2"
-      - "--farm-during-initial-plotting=true"
-      - "--node-rpc-url"
-      - "ws://node:9944"
-      - "--listen-on"
-      - "/ip4/0.0.0.0/udp/30533/quic-v1"
-      - "--listen-on"
-      - "/ip4/0.0.0.0/tcp/30533"
-      - "--reward-address"
-      - "YOUR_WALLET_ADDRESS" #<<<<REPLACE ME
-      - "path=/var/subspace,size=100G"
 profiles:
   compute:
     node:
@@ -78,12 +83,16 @@ profiles:
     farmer:
       resources:
         cpu:
-          units: 4.0
+          units: 16.0
         memory:
           size: 8Gi
         storage:
-          size: 100Gi
-
+          - size: 1Gi
+          - name: data
+            size: 100Gi
+            attributes:
+              persistent: true
+              class: beta2
   placement:
     akash:
       #######################################################

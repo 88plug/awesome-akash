@@ -19,9 +19,9 @@ Gemini 3h marks a new chapter, inviting individuals to farm from anywhere, earni
 - **Community-Owned**: Help shape the future of an open and inclusive Web3.
 - **Fair Rewards**: Low barriers to entry ensure everyone can participate and earn fair rewards.
 
-## Minimum Hardware Requirements
+## Minimum Farmer Hardware Requirements
 
-- 4 dedicated CPU cores
+- 16 dedicated CPU cores
 - 8GB of RAM
 - 100GB of hard drive space
 
