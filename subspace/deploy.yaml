@@ -4,24 +4,23 @@ services:
   farmer:
     depends_on:
       - node
-    image: ghcr.io/subspace/farmer:gemini-3h-2024-jul-29
+    image: ghcr.io/autonomys/farmer:gemini-3h-2024-jul-29
     expose:
       - port: 30533
         as: 30533
         to:
           - global: true
-    params:
-      storage:
-        data:
-          mount: /var/subspace
-          readOnly: false
+#    params:
+#      storage:
+#        data:
+#          mount: /var/subspace
+#          readOnly: false
 
     args:
       - "farm"
 #      - "--plotting-thread-pool-size=4"
 #      - "--sector-encoding-concurrency=1"
 #      - "--sector-downloading-concurrency=2"
-      - "--farm-during-initial-plotting=true"
       - "--node-rpc-url"
       - "ws://node:9944"
       - "--listen-on"
@@ -32,7 +31,7 @@ services:
       - "st9V6Wmm2CP9nTWRxbQ6Fb4xUxadRTFrqGgCCTAyptjSotR4E" #<<<<REPLACE ME
       - "path=/var/subspace,size=100G"
   node:
-    image: ghcr.io/subspace/node:gemini-3h-2024-jul-29
+    image: ghcr.io/autonomys/node:gemini-3h-2024-jul-29
     expose:
       - port: 30333
         as: 30333
@@ -49,10 +48,6 @@ services:
       - "run"
       - "--chain"
       - "gemini-3h"
-      - "--blocks-pruning"
-      - "256"
-      - "--state-pruning"
-      - "archive-canonical"
       - "--base-path"
       - "/var/subspace"
       - "--listen-on"
@@ -87,12 +82,12 @@ profiles:
         memory:
           size: 8Gi
         storage:
-          - size: 1Gi
-          - name: data
-            size: 100Gi
-            attributes:
-              persistent: true
-              class: beta2
+          - size: 101Gi
+#          - name: data
+#            size: 100Gi
+#            attributes:
+#              persistent: true
+#              class: beta2
   placement:
     akash:
       #######################################################
