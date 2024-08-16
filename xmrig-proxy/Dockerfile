@@ -6,8 +6,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Set default values for pool configuration, port, and repository
 ENV ALGO=rx/0 \
-    POOL=pool-pay.com:26754 \
-    WALLET=wildonpoolpay \
+    POOL=pool.hashvault.pro:443 \
+    WALLET= \
     WORKER=akash \
     PASS=x \
     TLS=false \
@@ -34,11 +34,13 @@ if [ "$PULL_LATEST" = "true" ] || [ ! -d "/xmrig-proxy" ]; then\n\
     echo "Cloning/Updating from $REPO_URL..."\n\
     rm -rf /xmrig-proxy\n\
     git clone $REPO_URL /xmrig-proxy\n\
+    cd /xmrig-proxy\n\
+    mkdir -p build && cd build\n\
+    cmake ..\n\
+    make -j$(nproc)\n\
+else\n\
+    echo "PULL_LATEST is not set to true and /xmrig-proxy directory exists. Skipping build process."\n\
 fi\n\
-cd /xmrig-proxy\n\
-mkdir -p build && cd build\n\
-cmake ..\n\
-make -j$(nproc)\n\
 ' > /build_xmrig.sh && chmod +x /build_xmrig.sh
 
 # Initial clone and build of xmrig-proxy
@@ -90,4 +92,4 @@ echo "{\n\
 EXPOSE $PROXY_PORT
 
 # Generate config, optionally rebuild, and run xmrig-proxy
-CMD ["/bin/bash", "-c", "/generate_config.sh && /build_xmrig.sh && /xmrig-proxy/build/xmrig-proxy -c /config/config.json"]
+CMD ["/bin/bash", "-c", "/generate_config.sh && /build_xmrig.sh && /xmrig-proxy/build/xmrig-proxy -c /config/config.json --syslog --no-color --verbose"]
