@@ -1,28 +1,57 @@
+---
 version: "2.0"
-
 services:
   bitping:
-    image: mrcolorrain/bitping
+    ###################################
+    image: bitping/bitpingd:24.7.17-3
+    ###################################
+    #https://hub.docker.com/r/bitping/bitpingd/tags
     expose:
       - port: 80
         as: 80
         to:
           - global: true
     env:
-      - "BITPING_EMAIL="
-      - "BITPING_PASSWD="
+      - BITPING_EMAIL=cryptoandcoffee@protonmail.com
+      - BITPING_PASSWORD=zRd,3Xh6G!x:aYV
+      - BITPING_MFA=
+    params:
+      storage:
+        data:
+          mount: /root/.bitpingd
+          readOnly: false
 profiles:
   compute:
     bitping:
       resources:
+      #https://bitping.com/help/nodes/system-requirements
         cpu:
-          units: 1.0
+          units: 1
         memory:
           size: 2Gi
         storage:
-          size: 10Gi
+          - size: 5Mi
+          - name: data
+            size: 10Gi
+            attributes:
+              persistent: true
+              class: 
+                #- beta1 #HD
+                #- beta2 #SSD
+                - beta3 #NVME
   placement:
     akash:
+      #######################################################
+      #Keep this section to deploy on trusted providers
+      signedBy:
+        anyOf:
+          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
+          - "akash18qa2a2ltfyvkyj0ggj3hkvuj6twzyumuaru9s4"
+      #######################################################
+      #Remove this section to deploy on untrusted providers
+      #Miners: You can receive more bids from more providers by removing this section
+      #Beware* You may have deployment, security, or other issues on untrusted providers
+      #https://akash.network/docs/providers/audited-attributes
       pricing:
         bitping:
           denom: uakt
@@ -31,4 +60,4 @@ deployment:
   bitping:
     akash:
       profile: bitping
-      count: 1
+      count: 5
