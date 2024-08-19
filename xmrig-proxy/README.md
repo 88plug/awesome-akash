@@ -30,7 +30,7 @@ Before deploying xmrig-proxy on Akash Network, ensure you have:
 
 5. **Basic Blockchain Knowledge**: Familiarity with blockchain concepts and cryptocurrency mining basics.
 
-6. **Akash Deployment Experience**: Basic understanding of how to create and manage deployments on Akash Network. If you're new to Akash, consider reviewing their [documentation](https://docs.akash.network/) first.
+6. **Akash Deployment Experience**: Basic understanding of how to create and manage deployments on Akash Network. If you're new to Akash, consider reviewing their [documentation](https://akash.network/docs) first.
 
 ## Deployment
 
