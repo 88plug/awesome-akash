@@ -3,7 +3,7 @@ version: "2.0"
 
 services:
   kawpow-pool:
-    image: cryptoandcoffee/akash-kawpow-pool:9
+    image: cryptoandcoffee/akash-kawpow-pool:11
     expose:
       - port: 17117
         to:
@@ -70,7 +70,7 @@ services:
       - DAEMON_USER=user1
       - DAEMON_PASS=pass1
   meowcoin:
-    image: cryptoandcoffee/akash-meowcoin:3
+    image: cryptoandcoffee/akash-meowcoin:5
     expose:
       - port: 9766
         to:

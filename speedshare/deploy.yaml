@@ -1,0 +1,34 @@
+version: "2.0"
+
+services:
+  speedshare:
+    image: mrcolorrain/speedshare
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+    env:
+      - CODE=
+      - SPEEDSHARE_UUID=
+profiles:
+  compute:
+    speedshare:
+      resources:
+        cpu:
+          units: 0.5
+        memory:
+          size: 256Mi
+        storage:
+          size: 6Mi
+  placement:
+    akash:
+      pricing:
+        speedshare:
+          denom: uakt
+          amount: 100000
+deployment:
+  speedshare:
+    akash:
+      profile: speedshare
+      count: 1

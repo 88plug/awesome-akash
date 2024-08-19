@@ -1,0 +1,35 @@
+version: "2.0"
+
+services:
+  mysterium:
+    image: mysteriumnetwork/myst
+    expose:
+      - port: 4449
+        as: 80
+        to:
+          - global: true
+    args:
+      - 'service'
+      - '--agreed-terms-and-conditions'
+      - '--identity.passphrase=your_passphrase_here'
+profiles:
+  compute:
+    mysterium:
+      resources:
+        cpu:
+          units: 2.0
+        memory:
+          size: 2Gi
+        storage:
+          size: 1Gi
+  placement:
+    akash:
+      pricing:
+        mysterium:
+          denom: uakt
+          amount: 100000
+deployment:
+  mysterium:
+    akash:
+      profile: mysterium
+      count: 1

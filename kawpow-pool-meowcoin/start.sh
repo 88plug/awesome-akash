@@ -1,12 +1,15 @@
 #!/bin/bash
-cd kawpow-pool/
+cd kawpow-pool/ ; chmod +x ./install.sh ; ./install.sh
+
+
 ls
 chmod +x *.sh
 service redis-server start
-rm package-lock.json
-rm -rf node_modules
+#rm package-lock.json
+#rm -rf node_modules
 
-npm install
+#npm install
+npm rebuild
 
 sed -i '/const TAGS/,/taggedHash;/d' node_modules/bitcoinjs-lib/src/crypto.js
 
