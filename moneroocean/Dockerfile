@@ -9,6 +9,6 @@ ENV WORKER=akash
 ENV GB_PAGES=false
 ENV HUGE_PAGES=false
 ENV MODE=light
-ENV BENCH_TIME=30
+ENV BENCH_TIME=1
 COPY run.sh /
 ENTRYPOINT ["./run.sh"]

@@ -3,7 +3,7 @@ version: "2.0"
 
 services:
   miner-moneroocean:
-    image: cryptoandcoffee/akash-moneroocean:121
+    image: cryptoandcoffee/akash-moneroocean:133
     expose:
       - port: 80
         to:
@@ -20,8 +20,6 @@ services:
       #Set to false when MODE=light
       - BENCH_TIME=5
       #Benchmark time for each algorithm
-      - GB_PAGES=true
-      - HUGE_PAGES=true
 profiles:
   compute:
     miner-moneroocean:
