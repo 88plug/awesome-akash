@@ -169,12 +169,12 @@ else
 fi
 
 # Always set init-avx2 to true for performance
-if check_cpu_feature 'avx2'; then
-    sed -i 's/"init-avx2": *[^,]*,/"init-avx2": true,/' $CONFIG_FILE
-else
-    echo "AVX2 Support not found"
-    sed -i 's/"init-avx2": *[^,]*,/"init-avx2": false,/' $CONFIG_FILE
-fi
+#if check_cpu_feature 'avx2'; then
+#    sed -i 's/"init-avx2": *[^,]*,/"init-avx2": true,/' $CONFIG_FILE
+#else
+#    echo "AVX2 Support not found"
+#    sed -i 's/"init-avx2": *[^,]*,/"init-avx2": false,/' $CONFIG_FILE
+#fi
 
 # Always set hw-aes to true for performance
 #if check_cpu_feature 'aes'; then

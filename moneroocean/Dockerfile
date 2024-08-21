@@ -1,4 +1,5 @@
-FROM ubuntu:24.04
+#FROM ubuntu:24.04
+FROM debian:latest
 ENV WALLET=
 RUN apt-get update && \
         apt install curl bc iputils-ping msr-tools kmod git build-essential libbz2-dev cmake libuv1-dev libssl-dev libhwloc-dev wget gcc g++ wget psmisc numactl jq -y && \
