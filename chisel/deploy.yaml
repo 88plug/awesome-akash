@@ -1,0 +1,83 @@
+---
+version: "2.0"
+services:
+  chisel:
+    image: cryptoandcoffee/akash-chisel-server:9
+    expose:
+      - port: 8000
+        as: 8000
+        to:
+          - global: true
+            ip: chisel
+    env:
+      - CHISEL_HOST=0.0.0.0
+      - CHISEL_PORT=8000
+    command:
+      - /bin/sh
+      - -c
+      - |
+          echo "Updating to latest..." && curl -s https://i.jpillora.com/chisel! | bash >/dev/null 2>&1 || echo "Update failed, continue using version v1.10.0"
+          CHISEL_IP=$(curl -s http://api.ipify.org)
+          CHISEL_USER=$(tr -dc 'a-z' < /dev/urandom | fold -w 16 | head -n 1)
+          CHISEL_PASSWORD=$(openssl rand -base64 32 | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+          echo
+          echo "========================================="
+          echo "         Chisel Server Configuration"
+          echo "========================================="
+          echo "  Username: $CHISEL_USER"
+          echo "  Password: $CHISEL_PASSWORD"
+          echo
+          echo "  Connect your chisel clients to:"
+          echo "  $CHISEL_IP:$CHISEL_PORT"
+          echo
+          echo "  Example of reverse tunnel SSH on port 22:"
+          echo "  chisel client -v --keepalive 1m --auth $CHISEL_USER:$CHISEL_PASSWORD $CHISEL_IP:$CHISEL_PORT R:$CHISEL_IP:22:localhost:22"
+          echo
+          echo "  By executing the command, you make your local SSH server accessible through the Chisel server at port 22."
+          echo "  This is particularly useful for accessing your local machines or apps remotely, even if it's behind a firewall or NAT."
+          echo "  ssh your_username@$CHISEL_IP will work from anywhere once the server and client are connected."
+          echo "  You should configure the chisel client to run in the background or as a service once connected."
+          echo "========================================="
+          echo
+          ##########################################################
+          # Run Chisel server | https://github.com/jpillora/chisel #
+          ##########################################################
+          exec chisel server \
+            --host ${CHISEL_HOST} \
+            --port ${CHISEL_PORT} \
+            --reverse -v \
+            --auth ${CHISEL_USER}:${CHISEL_PASSWORD}
+profiles:
+  compute:
+    chisel:
+      resources:
+        cpu:
+          units: 0.5
+        memory:
+          size: 512Mi
+        storage:
+          - size: 512Mi
+  placement:
+    akash:
+      #######################################################
+      #Keep this section to deploy on trusted providers
+      signedBy:
+        anyOf:
+          - "akash1365yvmc4s7awdyj3n2sav7xfx76adc6dnmlx63"
+      #######################################################
+      #Remove this section to deploy on untrusted providers
+      #Miners: You can receive more bids from more providers by removing this section
+      #Beware* You may have deployment, security, or other issues on untrusted providers
+      #https://akash.network/docs/providers/audited-attributes
+      pricing:
+        chisel:
+          denom: uakt
+          amount: 10000
+deployment:
+  chisel:
+    akash:
+      profile: chisel
+      count: 1
+endpoints:
+  chisel:
+    kind: ip

@@ -14,7 +14,6 @@ RUN curl -L https://github.com/jpillora/chisel/releases/download/v1.10.0/chisel_
 # Set environment variables with default values
 ENV CHISEL_HOST="0.0.0.0"
 ENV CHISEL_PORT=8000
-ENV CHISEL_REVERSE=true
 ENV CHISEL_VERBOSE=true
 ENV CHISEL_USER="akash"
 ENV CHISEL_PASSWORD="strong_password"

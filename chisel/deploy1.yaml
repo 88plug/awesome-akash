@@ -1,0 +1,42 @@
+---
+version: "2.0"
+services:
+  chisel:
+    image: cryptoandcoffee/akash-chisel-server:7
+    expose:
+      - port: 8000
+        as: 8000
+        to:
+          - global: true
+    env:
+      - CHISEL_HOST=0.0.0.0
+      - CHISEL_PORT=8000
+      - CHISEL_REVERSE=true
+      - CHISEL_VERBOSE=true
+      - CHISEL_USER=akash
+      - CHISEL_PASSWORD=strong_passwordds
+    command:
+      - "bash"
+      - "-c"
+      - "exec chisel server --host $CHISEL_HOST --port $CHISEL_PORT --reverse -v --auth $CHISEL_USER:$CHISEL_PASSWORD"
+profiles:
+  compute:
+    chisel:
+      resources:
+        cpu:
+          units: 0.25
+        memory:
+          size: 256Mi
+        storage:
+          - size: 5Mi
+  placement:
+    akash:
+      pricing:
+        chisel:
+          denom: uakt
+          amount: 2000
+deployment:
+  chisel:
+    akash:
+      profile: chisel
+      count: 1
