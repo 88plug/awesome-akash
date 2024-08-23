@@ -1,0 +1,83 @@
+# Welcome to the Akash Network! 🚀☁
+# This file is called a Stack Definition Laguage (SDL)
+# SDL is a human friendly data standard for declaring deployment attributes. 
+# The SDL file is a "form" to request resources from the Network. 
+# SDL is compatible with the YAML standard and similar to Docker Compose files.
+
+---
+# Indicates version of Akash configuration file. Currently only "2.0" is accepted.
+version: "2.0"
+
+# The top-level services entry contains a map of workloads to be ran on the Akash deployment. Each key is a service name; values are a map containing the following keys:
+# https://akash.network/docs/getting-started/stack-definition-language/#services
+services:
+  # The name of the service "web"
+  web:
+    image: arweave/arweave:latest
+    expose:
+      - port: 1984
+    env:
+      - MINING_ADDRESS=your-mining-address-here
+      - DATA_DIR=/var/arweave/data
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        echo "Setting up the Arweave miner..."
+        echo '{
+          "kty": "RSA",
+          "n": "your-sample-key-content",
+          "e": "AQAB",
+          "d": "your-sample-private-key-content",
+          "p": "your-sample-p",
+          "q": "your-sample-q",
+          "dp": "your-sample-dp",
+          "dq": "your-sample-dq",
+          "qi": "your-sample-qi"
+        }' > /var/arweave/arweave-keyfile.json
+        exec ./bin/start data_dir /var/arweave/data \
+          mining_addr $MINING_ADDRESS \
+          enable legacy_storage_repacking \
+          enable randomx_large_pages \
+          peer ams-1.eu-central-1.arweave.net \
+          peer fra-1.eu-central-2.arweave.net \
+          peer sgp-1.ap-central-2.arweave.net \
+          peer blr-1.ap-central-1.arweave.net \
+          peer sfo-1.na-west-1.arweave.net \
+          mine \
+          storage_module 0,$MINING_ADDRESS
+
+# The profiles section contains named compute and placement profiles to be used in the deployment.
+# https://akash.network/docs/getting-started/stack-definition-language/#profiles
+profiles:
+  # profiles.compute is map of named compute profiles. Each profile specifies compute resources to be leased for each service instance uses uses the profile.
+  # https://akash.network/docs/getting-started/stack-definition-language/#profilescompute
+  compute:
+    # The name of the service
+    web:
+      resources:
+        cpu:
+          units: 16
+        memory:
+          size: 32Gi
+        storage:
+          size: 4Ti
+
+# profiles.placement is map of named datacenter profiles. Each profile specifies required datacenter attributes and pricing configuration for each compute profile that will be used within the datacenter. It also specifies optional list of signatures of which tenants expects audit of datacenter attributes.
+# https://akash.network/docs/getting-started/stack-definition-language/#profilesplacement
+  placement:
+    dcloud:
+      pricing:
+        # The name of the service
+        web:
+          denom: uakt
+          amount: 1000
+
+# The deployment section defines how to deploy the services. It is a mapping of service name to deployment configuration.
+# https://akash.network/docs/getting-started/stack-definition-language/#deployment
+deployment:
+  # The name of the service
+  web:
+    dcloud:
+      profile: web
+      count: 1
